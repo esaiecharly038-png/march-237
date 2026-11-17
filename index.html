@@ -93,6 +93,7 @@ form.stack{display:flex;flex-direction:column;gap:12px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:12px 16px;border-radius:12px;z-index:60;max-width:calc(100% - 32px);font-size:14px}
 .load{padding:40px;text-align:center;color:var(--muted)}
 [hidden]{display:none!important}
+.cnt{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:var(--accent);color:var(--accent-fg);font-size:12px;font-weight:700;text-align:center;margin-left:4px}
 .srow{display:flex;gap:8px}.srow input{flex:1;min-width:0}
 #fx{margin-top:10px}
 @media(max-width:720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card h3{font-size:15px}.price{font-size:17px}}
@@ -134,7 +135,7 @@ function modal(html){var o=document.createElement('div');o.className='overlay';o
   o.addEventListener('click',function(e){if(e.target===o||e.target.closest('[data-close]'))close()});
   document.body.appendChild(o);o.close=close;return o}
 
-var me=null,profile=null,myShop=null,cities=[],cats=[],products=[];
+var me=null,profile=null,myShop=null,cities=[],cats=[],products=[],unread=0;
 function cityName(id){var c=cities.find(function(x){return x.id===id});return c?c.name:''}
 function catName(id){var c=cats.find(function(x){return x.id===id});return c?c.name:''}
 function cityId(v){var n=norm(v||'').trim();var c=cities.find(function(x){return norm(x.name)===n});return c?c.id:null}
@@ -151,13 +152,22 @@ async function setSession(s){
     var p=await sb.from('profiles').select('*').eq('id',me.id).maybeSingle();profile=p.data;
     var sh=await sb.from('shops').select('*').eq('owner_id',me.id).order('created_at').limit(1);myShop=(sh.data||[])[0]||null;
   }
-  renderNav();
+  unread=0;renderNav();if(me)refreshUnread(false);
+}
+async function refreshUnread(announce){
+  if(!me)return;
+  var r=await sb.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',me.id).eq('read',false);
+  if(r.error)return;
+  var n=r.count||0;
+  if(announce&&n>unread)toast('Tu as une nouvelle notification.');
+  unread=n;renderNav();
 }
 function renderNav(){
   var h=location.hash||'#/';
   function l(href,t){return '<a href="'+href+'"'+(h===href?' class="on"':'')+'>'+t+'</a>'}
   var s=l('#/','Accueil')+l('#/vendeur','Vendre');
   if(isAdmin())s+=l('#/admin','Admin');
+  if(me)s+=l('#/notifications','Notifications'+(unread?' <span class="cnt">'+unread+'</span>':''));
   s+=me?l('#/compte','Mon compte'):l('#/compte','Connexion');
   $('#nav').innerHTML=s;
 }
@@ -170,6 +180,7 @@ async function route(){
     if(r==='compte')return await viewAccount();
     if(r==='vendeur')return await viewSeller();
     if(r==='admin')return await viewAdmin();
+    if(r==='notifications')return await viewNotifs();
     return await viewHome();
   }catch(e){$('#app').innerHTML='<div class="empty">Une erreur est survenue : '+esc(errMsg(e))+'</div>'}
 }
@@ -413,6 +424,17 @@ async function viewSeller(){
   }
 }
 
+/* ---------- NOTIFICATIONS ---------- */
+async function viewNotifs(){
+  if(!me){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Notifications</h2><p>Connecte-toi pour voir tes notifications.</p><a class="btn btn-brand" href="#/compte">Connexion</a></div></section>';return}
+  $('#app').innerHTML='<section class="sec"><div class="sec-h"><h2>Notifications</h2><button class="btn btn-line btn-sm" id="rd" type="button">Tout marquer comme lu</button></div><div id="nl" class="list"><div class="load">Chargement…</div></div></section>';
+  var r=await sb.from('notifications').select('*').eq('user_id',me.id).order('created_at',{ascending:false}).limit(50);
+  if(r.error){$('#nl').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+  var l=r.data||[];
+  $('#nl').innerHTML=l.length?l.map(function(n){return '<div class="item" style="'+(n.read?'':'border-color:var(--brand)')+'"><div class="tx"><b>'+esc(n.title)+'</b>'+(n.read?'':' <span class="pill">Nouveau</span>')+'<div>'+esc(n.body||'')+'</div><div class="muted">'+new Date(n.created_at).toLocaleString('fr-FR')+'</div></div></div>'}).join(''):'<div class="empty">Aucune notification pour le moment.</div>';
+  $('#rd').addEventListener('click',function(){var b=this;run(b,async function(){var u=await sb.from('notifications').update({read:true}).eq('user_id',me.id).eq('read',false);if(u.error)throw u.error;await refreshUnread(false);viewNotifs()})});
+}
+
 /* ---------- ADMIN ---------- */
 async function viewAdmin(){
   if(!isAdmin()){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Accès réservé</h2><p>Cette page est réservée à l\'administrateur.</p></div></section>';return}
@@ -494,6 +516,7 @@ async function viewAdmin(){
     var dl=document.createElement('datalist');dl.id='dl-cities';dl.innerHTML=cities.map(function(c){return '<option value="'+esc(c.name)+'">'}).join('');document.body.appendChild(dl);
     var s=(await sb.auth.getSession()).data.session;await setSession(s);
     sb.auth.onAuthStateChange(function(ev){if(ev==='SIGNED_OUT'&&me){setSession(null).then(route)}});
+    setInterval(function(){if(me&&!document.hidden)refreshUnread(true)},60000);
   }catch(e){}
   route();
 })();
