@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Marché237</title>
+<link rel="icon" type="image/png" href="favicon-marche237.png">
+<link rel="apple-touch-icon" href="logo-marche237.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  /* Palette Marché237 : vert forêt, or doux et neutres chaleureux */
+  --bg:#f7f8f5;--surface:#ffffff;--fg:#26332b;--muted:#68756c;--line:#e1e7e1;
+  --brand:#14532d;--brand-fg:#ffffff;--brand-soft:#e8f0e9;
+  --accent:#d6a84f;--accent-fg:#263018;--deal:#b94b3b;--deal-fg:#ffffff;--warn:#805b19;--warn-bg:#f8f0dc;
+  --font-d:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--font-b:'Inter','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#111a14;--surface:#1a271f;--fg:#edf2ed;--muted:#a5b1a8;--line:#304137;
+  --brand:#286b43;--brand-fg:#ffffff;--brand-soft:#22382a;
+  --accent:#d6a84f;--accent-fg:#263018;--deal:#d16b59;--deal-fg:#200d09;--warn:#e0bd70;--warn-bg:#382f1c;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-b);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:48px}
+h1,h2,h3{font-family:var(--font-d);line-height:1.15;margin:0;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin-inline:auto}
+header.top{background:var(--brand);color:var(--brand-fg);margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:12px max(16px,env(safe-area-inset-left,0px));padding-top:max(12px,env(safe-area-inset-top,0px))}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:800;font-size:22px;color:inherit;text-decoration:none}
+.logo img{display:block;width:42px;height:42px;object-fit:cover;border-radius:50%;background:#fff;border:2px solid var(--accent);flex:none}
+.links{display:flex;gap:6px;flex-wrap:wrap}
+.links a,.links button{color:inherit;text-decoration:none;border:1px solid rgba(255,255,255,.35);background:transparent;border-radius:9px;padding:7px 12px;font-size:14px;cursor:pointer}
+.links a.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn-brand{background:var(--brand);color:var(--brand-fg)}
+.btn-line{background:transparent;border-color:var(--line)}
+.btn-wa{background:#1fa855;color:#fff}
+.btn-deal{background:var(--deal);color:var(--deal-fg)}
+.btn-sm{padding:7px 11px;font-size:13px}
+.btn[disabled]{opacity:.55;cursor:wait}
+.hero{padding:22px 0 6px}
+.hero h1{font-size:clamp(24px,4vw,36px);max-width:22ch}
+.hero p{color:var(--muted);margin:8px 0 0;max-width:60ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end;margin-top:14px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;min-width:0}
+input[type=text],input[type=search],input[type=email],input[type=password],input[type=tel],input[type=number],select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;width:100%;min-width:0;font-size:15px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--fg)}
+textarea{min-height:90px;resize:vertical}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;padding-bottom:10px}
+.sec{margin-top:26px}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.sec-h h2{font-size:clamp(19px,2.6vw,25px)}
+.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.ph{position:relative;aspect-ratio:4/3;background:var(--brand-soft);display:grid;place-items:center;color:var(--brand);font-family:var(--font-d);font-weight:800;font-size:34px;cursor:pointer;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;top:8px;left:8px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--surface);color:var(--fg)}
+.badge.deal{left:auto;right:8px;background:var(--deal);color:var(--deal-fg)}
+.card .b{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.card h3{font-family:var(--font-b);font-size:16px;font-weight:600;cursor:pointer}
+.price{font-family:var(--font-d);font-weight:700;font-size:19px}
+.price s{font-family:var(--font-b);font-weight:400;font-size:13px;color:var(--muted);margin-left:6px}
+.ok{color:var(--brand);font-weight:700}
+.card .acts{margin-top:auto;display:flex;gap:6px;flex-wrap:wrap}
+.card .acts .btn-wa{flex:1}
+.empty{border:1px dashed var(--line);border-radius:14px;padding:26px;text-align:center;color:var(--muted);grid-column:1/-1}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:14px}
+.tab[aria-pressed="true"]{background:var(--brand);color:var(--brand-fg);border-color:var(--brand)}
+form.stack{display:flex;flex-direction:column;gap:12px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.narrow{max-width:460px;margin-inline:auto}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;flex-wrap:wrap}
+.item .th{flex:none;width:64px;height:64px;border-radius:8px;background:var(--brand-soft);overflow:hidden;display:grid;place-items:center;color:var(--brand);font-weight:800}
+.item .th img{width:100%;height:100%;object-fit:cover}
+.item .tx{flex:1;min-width:180px}
+.item .ac{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--brand-soft);color:var(--brand)}
+.pill.w{background:var(--warn-bg);color:var(--warn)}
+.pill.r{background:var(--deal);color:var(--deal-fg)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-family:var(--font-d);font-size:24px}
+.notice{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;font-size:14px}
+.overlay{position:fixed;inset:0;background:rgba(5,12,8,.6);z-index:50;display:grid;place-items:center;padding:16px}
+.modal{background:var(--surface);border-radius:16px;width:100%;max-width:520px;max-height:calc(100% - 8px);overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
+.modal .gal{display:flex;gap:8px;overflow-x:auto}
+.modal .gal img{height:200px;border-radius:10px;flex:none;max-width:85%;object-fit:cover}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:12px 16px;border-radius:12px;z-index:60;max-width:calc(100% - 32px);font-size:14px}
+.load{padding:40px;text-align:center;color:var(--muted)}
+[hidden]{display:none!important}
+.cnt{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:var(--accent);color:var(--accent-fg);font-size:12px;font-weight:700;text-align:center;margin-left:4px}
+.srow{display:flex;gap:8px}.srow input{flex:1;min-width:0}
+#fx{margin-top:10px}
+@media(max-width:720px){
+  /* Navigation mobile : logo au-dessus, menu horizontal sur une seule ligne */
+  header.top{padding-top:max(8px,env(safe-area-inset-top,0px));padding-bottom:8px}
+  .nav{align-items:flex-start;flex-direction:column;flex-wrap:nowrap;gap:8px}
+  .logo{font-size:20px;gap:8px}
+  .logo img{width:38px;height:38px}
+  .links{width:100%;display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;overflow-y:hidden;padding:0 0 3px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .links::-webkit-scrollbar{display:none}
+  .links a,.links button{flex:0 0 auto;padding:7px 11px;font-size:13px;white-space:nowrap}
+  /* Recherche : empêcher le champ et le bouton de dépasser l'écran */
+  #sf{width:100%;min-width:0;max-width:100%;overflow:hidden}
+  .srow{display:flex;width:100%;min-width:0;gap:7px}
+  .srow input{flex:1 1 0;width:0;min-width:0;font-size:14px;padding:10px 9px}
+  .srow button{flex:0 0 auto;padding:10px 11px;font-size:13px}
+  .filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card h3{font-size:15px}.price{font-size:17px}
+}
+@media(max-width:360px){
+  .links a,.links button{padding:7px 9px;font-size:12px}
+  .srow button{padding-inline:9px}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap nav">
+  <a class="logo" href="#/" aria-label="Marché237, accueil"><img src="logo-marche237.png" alt="Logo Marché237">Marché237</a>
+  <nav class="links" id="nav"></nav>
+</div></header>
+<main class="wrap" id="app"><div class="load">Chargement…</div></main>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(function(){
+'use strict';
+/* Clés publiques : faites pour être dans le site. La sécurité est assurée par les règles (RLS) de la base. */
+var SUPABASE_URL='https://rdugbvfexpbhwglposzd.supabase.co';
+var SUPABASE_KEY='sb_publishable_I9p8yr9_GHVx3QFKC51yMA_Q2sm55ka';
+var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fcfa(n){return Number(n).toLocaleString('fr-FR')+' FCFA'}
+function waLink(num,msg){var d=String(num||'').replace(/\D/g,'');if(d.length===9)d='237'+d;return 'https://wa.me/'+d+'?text='+encodeURIComponent(msg||'')}
+function dateFr(x){return new Date(x).toLocaleDateString('fr-FR')}
+var tt;function toast(m){var t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(function(){t.hidden=true},5200)}
+function errMsg(e){var m=(e&&e.message)||String(e);
+  if(/Invalid login/i.test(m))return 'Email ou mot de passe incorrect.';
+  if(/already registered/i.test(m))return 'Cet email a déjà un compte. Connecte-toi.';
+  if(/row-level security/i.test(m))return 'Action refusée : tu n\'as pas le droit de faire ça avec ce compte.';
+  if(/Email not confirmed/i.test(m))return 'Confirme d\'abord ton email (regarde ta boîte de réception).';
+  return m}
+async function run(btn,fn){var old=btn&&btn.textContent;if(btn){btn.disabled=true}try{await fn()}catch(e){toast(errMsg(e))}finally{if(btn){btn.disabled=false;if(old)btn.textContent=old}}}
+function modal(html){var o=document.createElement('div');o.className='overlay';o.innerHTML='<div class="modal" role="dialog" aria-modal="true">'+html+'</div>';
+  function close(){o.remove()}
+  o.addEventListener('click',function(e){if(e.target===o||e.target.closest('[data-close]'))close()});
+  document.body.appendChild(o);o.close=close;return o}
+
+var me=null,profile=null,myShop=null,cities=[],cats=[],products=[],unread=0;
+function cityName(id){var c=cities.find(function(x){return x.id===id});return c?c.name:''}
+function catName(id){var c=cats.find(function(x){return x.id===id});return c?c.name:''}
+function cityId(v){var n=norm(v||'').trim();var c=cities.find(function(x){return norm(x.name)===n});return c?c.id:null}
+function photoUrl(p){return sb.storage.from('product-photos').getPublicUrl(p).data.publicUrl}
+function firstPhoto(p){var a=(p.product_photos||[]).slice().sort(function(x,y){return x.position-y.position});return a.length?photoUrl(a[0].path):null}
+function opts(list,sel){return list.map(function(x){return '<option value="'+x.id+'"'+(String(x.id)===String(sel)?' selected':'')+'>'+esc(x.name)+'</option>'}).join('')}
+function isSeller(){return profile&&(profile.role==='seller'||profile.role==='admin')}
+function isAdmin(){return profile&&profile.role==='admin'}
+
+/* ---------- session ---------- */
+async function setSession(s){
+  me=s?s.user:null;profile=null;myShop=null;
+  if(me){
+    var p=await sb.from('profiles').select('*').eq('id',me.id).maybeSingle();profile=p.data;
+    var sh=await sb.from('shops').select('*').eq('owner_id',me.id).order('created_at').limit(1);myShop=(sh.data||[])[0]||null;
+  }
+  unread=0;renderNav();if(me)refreshUnread(false);
+}
+async function refreshUnread(announce){
+  if(!me)return;
+  var r=await sb.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',me.id).eq('read',false);
+  if(r.error)return;
+  var n=r.count||0;
+  if(announce&&n>unread)toast('Tu as une nouvelle notification.');
+  unread=n;renderNav();
+}
+function renderNav(){
+  var h=location.hash||'#/';
+  function l(href,t){return '<a href="'+href+'"'+(h===href?' class="on"':'')+'>'+t+'</a>'}
+  var s=l('#/','Accueil')+l('#/vendeur','Vendre');
+  if(isAdmin())s+=l('#/admin','Admin');
+  if(me)s+=l('#/notifications','Notifications'+(unread?' <span class="cnt">'+unread+'</span>':''));
+  s+=me?l('#/compte','Mon compte'):l('#/compte','Connexion');
+  $('#nav').innerHTML=s;
+}
+
+/* ---------- routeur ---------- */
+async function route(){
+  var r=(location.hash||'#/').replace(/^#\/?/,'');
+  renderNav();window.scrollTo(0,0);
+  try{
+    if(r==='compte')return await viewAccount();
+    if(r==='vendeur')return await viewSeller();
+    if(r==='admin')return await viewAdmin();
+    if(r==='notifications')return await viewNotifs();
+    return await viewHome();
+  }catch(e){$('#app').innerHTML='<div class="empty">Une erreur est survenue : '+esc(errMsg(e))+'</div>'}
+}
+window.addEventListener('hashchange',route);
+
+/* ---------- ACCUEIL ---------- */
+async function loadProducts(){
+  var r=await sb.from('products').select('id,title,description,price_xaf,old_price_xaf,condition,available,views,created_at,category_id,shop_id,product_photos(path,position),shops(name,verified,whatsapp,quarter,city_id)')
+    .eq('status','approved').order('created_at',{ascending:false}).limit(300);
+  if(r.error)throw r.error;products=r.data||[];
+}
+/* préférences du visiteur (stockées seulement sur son appareil) pour proposer des produits proches de ses recherches */
+var PK='m237_prefs';
+function getPrefs(){try{var p=JSON.parse(localStorage.getItem(PK));return p&&typeof p==='object'?{q:p.q||[],c:p.c||{},v:p.v||''}:{q:[],c:{},v:''}}catch(e){return {q:[],c:{},v:''}}}
+function savePrefs(p){try{localStorage.setItem(PK,JSON.stringify(p))}catch(e){}}
+function track(kind,val){
+  var p=getPrefs();
+  if(kind==='q'){var t=String(val||'').trim();if(t.length<2)return;p.q=[t].concat(p.q.filter(function(x){return x!==t})).slice(0,6)}
+  else if(kind==='c'){if(!val)return;p.c[val]=(p.c[val]||0)+1}
+  else if(kind==='v'){p.v=String(val||'')}
+  savePrefs(p);
+}
+function suggestions(){
+  var p=getPrefs(),terms=[];
+  p.q.forEach(function(t){norm(t).split(/\s+/).forEach(function(w){if(w.length>2)terms.push(w)})});
+  if(!terms.length&&!Object.keys(p.c).length&&!p.v)return [];
+  var sc=products.filter(function(x){return x.available}).map(function(x){
+    var s=0,hay=norm(x.title+' '+(x.description||'')+' '+catName(x.category_id));
+    terms.forEach(function(w){if(hay.indexOf(w)>-1)s+=3});
+    s+=Math.min(p.c[x.category_id]||0,5);
+    if(p.v&&norm(cityName(x.shops&&x.shops.city_id)).indexOf(norm(p.v))>-1)s+=2;
+    return {x:x,s:s}}).filter(function(o){return o.s>0});
+  sc.sort(function(a,b){return b.s-a.s||new Date(b.x.created_at)-new Date(a.x.created_at)});
+  return sc.slice(0,4).map(function(o){return o.x});
+}
+async function viewHome(){
+  $('#app').innerHTML='<p class="muted" style="margin:16px 0 8px">Des commerçants de tout le Cameroun. Tu vois le prix, tu écris au vendeur sur WhatsApp.</p>'+
+  '<form id="sf" class="panel" style="padding:10px">'+
+    '<div class="srow"><input type="search" id="q" placeholder="Rechercher : smartphone, matelas, riz…" aria-label="Rechercher un produit" autocomplete="off"><button type="button" class="btn btn-line" id="tf" aria-expanded="false">Filtres</button></div>'+
+    '<div class="filters" id="fx" hidden>'+
+      '<label class="f">Catégorie<select id="fc"><option value="">Toutes</option>'+opts(cats)+'</select></label>'+
+      '<label class="f">Ville<input type="search" id="fv" list="dl-cities" placeholder="Tout le Cameroun" autocomplete="off"></label>'+
+      '<label class="f">Prix max (FCFA)<input type="number" id="fp" min="0" step="1000" inputmode="numeric"></label>'+
+      '<label class="f">État<select id="fe"><option value="">Neuf ou occasion</option><option value="new">Neuf</option><option value="used">Occasion</option></select></label>'+
+      '<label class="f">Trier<select id="fs"><option value="recent">Plus récents</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option><option value="pop">Plus consultés</option></select></label>'+
+      '<label class="chk"><input type="checkbox" id="fa" checked> Disponibles seulement</label>'+
+    '</div></form>'+
+  '<section class="sec" id="sug" hidden><div class="sec-h"><h2>Suggestions pour vous</h2><button class="btn btn-line btn-sm" id="clr" type="button">Effacer mes recherches</button></div><div class="grid" id="gs"></div></section>'+
+  '<section class="sec"><div class="sec-h"><h2 id="ht">Annonces</h2><button class="btn btn-line btn-sm" id="req" type="button">Je cherche un produit</button></div><div class="grid" id="grid"><div class="load" style="grid-column:1/-1">Chargement…</div></div></section>';
+  try{await loadProducts()}catch(e){$('#grid').innerHTML='<div class="empty">Impossible de charger les annonces : '+esc(errMsg(e))+'</div>';return}
+  draw();
+  $$('#sf input,#sf select').forEach(function(x){x.addEventListener('input',draw)});
+  $('#sf').addEventListener('submit',function(e){e.preventDefault();track('q',$('#q').value);draw()});
+  $('#q').addEventListener('change',function(){track('q',this.value)});
+  $('#fc').addEventListener('change',function(){if(this.value)track('c',this.value)});
+  $('#fv').addEventListener('change',function(){if(cityId(this.value))track('v',this.value)});
+  $('#tf').addEventListener('click',function(){var h=$('#fx').hidden;$('#fx').hidden=!h;this.setAttribute('aria-expanded',String(h))});
+  $('#req').addEventListener('click',openRequest);
+  $('#clr').addEventListener('click',function(){savePrefs({q:[],c:{},v:''});draw();toast('Tes recherches ont été effacées.')});
+}
+function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+function draw(){
+  var q=norm($('#q').value.trim()),fc=$('#fc').value,fv=norm($('#fv').value.trim()),fp=parseInt($('#fp').value,10),fe=$('#fe').value,fa=$('#fa').checked,fs=$('#fs').value;
+  var filt=!!(q||fc||fv||fp||fe);
+  var l=products.filter(function(p){
+    if(fc&&String(p.category_id)!==fc)return false;
+    if(fv&&norm(cityName(p.shops&&p.shops.city_id)).indexOf(fv)<0)return false;
+    if(fe&&p.condition!==fe)return false;
+    if(fa&&!p.available)return false;
+    if(fp&&p.price_xaf>fp)return false;
+    if(q){var hay=norm(p.title+' '+(p.description||'')+' '+catName(p.category_id)+' '+(p.shops?p.shops.name:''));
+      if(!q.split(/\s+/).every(function(w){return hay.indexOf(w)>-1}))return false}
+    return true});
+  l.sort(function(a,b){if(fs==='asc')return a.price_xaf-b.price_xaf;if(fs==='desc')return b.price_xaf-a.price_xaf;if(fs==='pop')return b.views-a.views;return new Date(b.created_at)-new Date(a.created_at)});
+  var sug=filt?[]:suggestions(),ids={};
+  sug.forEach(function(x){ids[x.id]=1});
+  $('#sug').hidden=!sug.length;
+  $('#gs').innerHTML=sug.map(card).join('');
+  var main=l.filter(function(x){return !ids[x.id]});
+  $('#ht').textContent=filt?('Résultats ('+l.length+')'):(sug.length?'Toutes les annonces':'Annonces');
+  $('#grid').innerHTML=main.length?main.map(card).join(''):(sug.length?'':'<div class="empty">'+(filt?'Aucun résultat. Élargis ton budget ou publie une demande : les vendeurs te répondront.':'Aucune annonce publiée pour le moment. Les premières annonces apparaîtront ici dès leur validation.')+'</div>');
+}
+function card(p){
+  var s=p.shops||{},img=firstPhoto(p),deal=p.old_price_xaf>p.price_xaf?Math.round(100-p.price_xaf*100/p.old_price_xaf):0;
+  var wa=p.available?'<a class="btn btn-wa btn-sm" target="_blank" rel="noopener" href="'+waLink(s.whatsapp,'Bonjour, je suis intéressé(e) par « '+p.title+' » vu sur Marché237.')+'">WhatsApp</a>':'<span class="pill w">Indisponible</span>';
+  return '<article class="card"><div class="ph" data-open="'+p.id+'">'+(img?'<img src="'+esc(img)+'" alt="'+esc(p.title)+'" loading="lazy">':esc((p.title||'?').charAt(0).toUpperCase()))+
+    '<span class="badge">'+(p.condition==='new'?'Neuf':'Occasion')+'</span>'+(deal?'<span class="badge deal">−'+deal+' %</span>':'')+'</div>'+
+    '<div class="b"><h3 data-open="'+p.id+'">'+esc(p.title)+'</h3><div class="price">'+fcfa(p.price_xaf)+(deal?'<s>'+fcfa(p.old_price_xaf)+'</s>':'')+'</div>'+
+    '<div class="muted">'+esc(cityName(s.city_id))+(s.quarter?', '+esc(s.quarter):'')+'</div>'+
+    '<div class="muted">'+esc(s.name||'')+(s.verified?' <span class="ok">✓ vérifiée</span>':'')+'</div>'+
+    '<div class="acts">'+wa+'<button class="btn btn-line btn-sm" data-report="'+p.id+'" title="Signaler cette annonce">Signaler</button></div></div></article>';
+}
+document.addEventListener('click',function(e){
+  var o=e.target.closest('[data-open]');if(o&&$('#grid')&&$('#grid').contains(o)){openProduct(o.dataset.open);return}
+  var r=e.target.closest('[data-report]');if(r){openReport(r.dataset.report)}
+});
+function openProduct(id){
+  var p=products.find(function(x){return x.id===id});if(!p)return;
+  track('c',p.category_id);
+  sb.rpc('increment_views',{p_id:id}).then(function(){});
+  var s=p.shops||{},ph=(p.product_photos||[]).slice().sort(function(a,b){return a.position-b.position});
+  var m=modal((ph.length?'<div class="gal">'+ph.map(function(x){return '<img src="'+esc(photoUrl(x.path))+'" alt="">'}).join('')+'</div>':'')+
+    '<h2>'+esc(p.title)+'</h2><div class="price">'+fcfa(p.price_xaf)+'</div>'+
+    '<div class="muted">'+(p.condition==='new'?'Neuf':'Occasion')+' · '+esc(catName(p.category_id))+' · '+esc(cityName(s.city_id))+(s.quarter?', '+esc(s.quarter):'')+'</div>'+
+    '<p style="white-space:pre-wrap;margin:0">'+esc(p.description||'Pas de description.')+'</p>'+
+    '<div class="muted">Vendu par '+esc(s.name||'')+(s.verified?' <span class="ok">✓ boutique vérifiée</span>':'')+'</div>'+
+    (p.available?'<a class="btn btn-wa" target="_blank" rel="noopener" href="'+waLink(s.whatsapp,'Bonjour, je suis intéressé(e) par « '+p.title+' » vu sur Marché237.')+'">Écrire au vendeur sur WhatsApp</a>':'<span class="pill w">Indisponible</span>')+
+    '<button class="btn btn-line" data-close>Fermer</button>');
+}
+function needLogin(){if(me)return false;toast('Connecte-toi d\'abord.');location.hash='#/compte';return true}
+function openReport(id){
+  if(needLogin())return;
+  var m=modal('<h2>Signaler cette annonce</h2><form class="stack" id="rf"><label class="f">Motif<select id="rr"><option>Produit ou prix trompeur</option><option>Arnaque suspectée</option><option>Contenu interdit</option><option>Produit déjà vendu</option><option>Autre</option></select></label><button class="btn btn-brand" type="submit">Envoyer le signalement</button><button class="btn btn-line" type="button" data-close>Annuler</button></form>');
+  $('#rf',m).addEventListener('submit',function(e){e.preventDefault();var b=$('button[type=submit]',m);
+    run(b,async function(){var r=await sb.from('reports').insert({product_id:id,reporter_id:me.id,reason:$('#rr',m).value});
+      if(r.error){if(r.error.code==='23505'){toast('Tu as déjà signalé cette annonce.');m.close();return}throw r.error}
+      toast('Merci, le signalement a été envoyé à l\'équipe.');m.close()})});
+}
+function openRequest(){
+  if(needLogin())return;
+  var m=modal('<h2>Publier une demande</h2><p class="muted" style="margin:0">Décris ce que tu cherches. Les vendeurs pourront te répondre sur WhatsApp.</p><form class="stack" id="qf">'+
+    '<label class="f">Produit recherché<input type="text" id="qt" required maxlength="140" placeholder="Ex. Frigo 2 portes en bon état"></label>'+
+    '<label class="f">Ville<input type="text" id="qc" list="dl-cities" required placeholder="Tape pour chercher une ville" autocomplete="off"></label>'+
+    '<label class="f">Budget max (FCFA)<input type="number" id="qb" min="0" step="1000" inputmode="numeric"></label>'+
+    '<label class="f">Ton numéro WhatsApp<input type="tel" id="qw" required placeholder="6XX XX XX XX" value="'+esc(profile&&profile.phone||'')+'"></label>'+
+    '<button class="btn btn-brand" type="submit">Publier ma demande</button><button class="btn btn-line" type="button" data-close>Annuler</button></form>');
+  $('#qf',m).addEventListener('submit',function(e){e.preventDefault();var b=$('button[type=submit]',m);
+    run(b,async function(){var cid=cityId($('#qc',m).value);if(!cid)throw new Error('Choisis une ville dans la liste proposée.');var r=await sb.from('buyer_requests').insert({buyer_id:me.id,title:$('#qt',m).value.trim(),city_id:cid,budget_xaf:$('#qb',m).value?parseInt($('#qb',m).value,10):null,whatsapp:$('#qw',m).value.trim()});
+      if(r.error)throw r.error;toast('Demande publiée.');m.close()})});
+}
+
+/* ---------- COMPTE ---------- */
+async function viewAccount(){
+  if(me){
+    var roleTxt={buyer:'Acheteur',seller:'Vendeur',admin:'Administrateur'}[profile&&profile.role]||'';
+    $('#app').innerHTML='<section class="sec narrow"><div class="panel stack" style="display:flex;flex-direction:column;gap:10px"><h2>Mon compte</h2>'+
+      '<div>'+esc(profile&&profile.full_name||'')+'<div class="muted">'+esc(me.email)+' · '+roleTxt+'</div></div>'+
+      (isSeller()?'<a class="btn btn-brand" href="#/vendeur">Mon espace vendeur</a>':'<div class="muted">Compte acheteur. Pour vendre, crée un compte vendeur avec une autre adresse email.</div>')+
+      (isAdmin()?'<a class="btn btn-line" href="#/admin">Administration</a>':'')+
+      '<button class="btn btn-line" id="out">Se déconnecter</button></div></section>';
+    $('#out').addEventListener('click',async function(){await sb.auth.signOut();await setSession(null);location.hash='#/'});
+    return;
+  }
+  var mode='login';
+  function paint(){
+    $('#app').innerHTML='<section class="sec narrow"><div class="tabs"><button class="tab" data-m="login" aria-pressed="'+(mode==='login')+'">Connexion</button><button class="tab" data-m="signup" aria-pressed="'+(mode==='signup')+'">Créer un compte</button></div>'+
+    '<form class="panel stack" id="af" style="display:flex;flex-direction:column;gap:12px">'+
+    (mode==='signup'?'<label class="f">Je suis<select id="ar"><option value="buyer">Acheteur</option><option value="seller">Vendeur (commerçant)</option></select></label><label class="f">Nom complet<input type="text" id="an" required></label><label class="f">Téléphone<input type="tel" id="ap" placeholder="6XX XX XX XX"></label>':'')+
+    '<label class="f">Email<input type="email" id="ae" required autocomplete="email"></label>'+
+    '<label class="f">Mot de passe<input type="password" id="aw" required minlength="8" autocomplete="'+(mode==='login'?'current-password':'new-password')+'"></label>'+
+    '<button class="btn btn-brand" type="submit">'+(mode==='login'?'Me connecter':'Créer mon compte')+'</button></form></section>';
+    $$('.tab').forEach(function(t){t.addEventListener('click',function(){mode=t.dataset.m;paint()})});
+    $('#af').addEventListener('submit',function(e){e.preventDefault();var b=$('button[type=submit]');
+      run(b,async function(){
+        var email=$('#ae').value.trim(),pw=$('#aw').value;
+        if(mode==='login'){var r=await sb.auth.signInWithPassword({email:email,password:pw});if(r.error)throw r.error;await setSession(r.data.session);toast('Connecté.');location.hash='#/'}
+        else{var r2=await sb.auth.signUp({email:email,password:pw,options:{data:{role:$('#ar').value,full_name:$('#an').value.trim(),phone:$('#ap').value.trim()}}});
+          if(r2.error)throw r2.error;
+          if(r2.data.session){await setSession(r2.data.session);toast('Compte créé.');location.hash='#/'}
+          else{$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Vérifie ta boîte mail</h2><p>Nous avons envoyé un lien de confirmation à <b>'+esc(email)+'</b>. Ouvre-le, puis reviens te connecter.</p></div></section>'}}
+      })});
+  }
+  paint();
+}
+
+/* ---------- ESPACE VENDEUR ---------- */
+function compress(file){return new Promise(function(res,rej){
+  var img=new Image(),u=URL.createObjectURL(file);
+  img.onload=function(){var max=1100,w=img.width,h=img.height,k=Math.min(1,max/Math.max(w,h));var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(function(b){b?res(b):rej(new Error('Photo illisible'))},'image/jpeg',0.8)};
+  img.onerror=function(){URL.revokeObjectURL(u);rej(new Error('Photo illisible'))};img.src=u})}
+function statusPill(p){var m={pending:['En validation','w'],approved:['Publiée',''],rejected:['Refusée','r'],removed:['Retirée','w']}[p.status]||[p.status,''];return '<span class="pill '+m[1]+'">'+m[0]+'</span>'}
+
+async function viewSeller(){
+  if(!me){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Espace vendeur</h2><p>Connecte-toi ou crée un compte vendeur pour publier tes produits.</p><a class="btn btn-brand" href="#/compte">Connexion / Inscription</a></div></section>';return}
+  if(!isSeller()){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Espace vendeur</h2><p>Ce compte est un compte acheteur. Crée un compte vendeur avec une autre adresse email pour vendre.</p></div></section>';return}
+  if(!myShop){
+    $('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Présente ta boutique</h2><p class="muted">Ta boutique sera vérifiée avant d\'apparaître sur le site.</p><form class="stack" id="shf">'+
+      '<label class="f">Nom de la boutique<input type="text" id="sn" required maxlength="80"></label>'+
+      '<label class="f">Ville<input type="text" id="sc" list="dl-cities" required placeholder="Tape pour chercher une ville" autocomplete="off"></label>'+
+      '<label class="f">Quartier<input type="text" id="sq" placeholder="Ex. Akwa, Bastos, Marché A"></label>'+
+      '<label class="f">Numéro WhatsApp<input type="tel" id="sw" required placeholder="6XX XX XX XX" value="'+esc(profile.phone||'')+'"></label>'+
+      '<label class="f">Description<textarea id="sd" maxlength="500"></textarea></label>'+
+      '<button class="btn btn-brand" type="submit">Envoyer pour validation</button></form></div></section>';
+    $('#shf').addEventListener('submit',function(e){e.preventDefault();run($('button[type=submit]'),async function(){
+      var cid=cityId($('#sc').value);if(!cid)throw new Error('Choisis une ville dans la liste proposée.');
+      var r=await sb.from('shops').insert({owner_id:me.id,name:$('#sn').value.trim(),city_id:cid,quarter:$('#sq').value.trim()||null,whatsapp:$('#sw').value.trim(),description:$('#sd').value.trim()||null});
+      if(r.error)throw r.error;await setSession((await sb.auth.getSession()).data.session);toast('Boutique envoyée pour validation.');viewSeller()})});
+    return;
+  }
+  if(myShop.status==='pending'){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>'+esc(myShop.name)+'</h2><div class="notice">Ta boutique est en cours de validation. Tu pourras publier tes produits dès qu\'elle sera approuvée.</div></div></section>';return}
+  if(myShop.status==='suspended'){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>'+esc(myShop.name)+'</h2><div class="notice">Ta boutique est suspendue. Contacte l\'équipe Marché237.</div></div></section>';return}
+
+  $('#app').innerHTML='<section class="sec"><div class="sec-h"><h2>'+esc(myShop.name)+(myShop.verified?' <span class="ok">✓</span>':'')+'</h2><span class="muted">'+esc(cityName(myShop.city_id))+'</span></div>'+
+    '<div class="tabs"><button class="tab" data-t="add" aria-pressed="true">Ajouter un produit</button><button class="tab" data-t="mine" aria-pressed="false">Mes annonces</button><button class="tab" data-t="req" aria-pressed="false">Demandes d\'acheteurs</button></div><div id="pane"></div></section>';
+  var tabs=$$('.tab');
+  function go(t){tabs.forEach(function(x){x.setAttribute('aria-pressed',String(x.dataset.t===t))});if(t==='add')paneAdd();else if(t==='mine')paneMine();else paneReq()}
+  tabs.forEach(function(x){x.addEventListener('click',function(){go(x.dataset.t)})});go('add');
+
+  function paneAdd(){
+    $('#pane').innerHTML='<form class="panel stack" id="pf"><div class="notice">Chaque annonce est relue avant d\'être publiée.</div>'+
+      '<label class="f">Titre<input type="text" id="pt" required minlength="3" maxlength="120"></label>'+
+      '<div class="two"><label class="f">Catégorie<select id="pc">'+opts(cats)+'</select></label><label class="f">État<select id="pe"><option value="new">Neuf</option><option value="used">Occasion</option></select></label></div>'+
+      '<div class="two"><label class="f">Prix (FCFA)<input type="number" id="pp" required min="0" step="500" inputmode="numeric"></label><label class="f">Ancien prix (optionnel)<input type="number" id="po" min="0" step="500" inputmode="numeric"></label></div>'+
+      '<label class="f">Description<textarea id="pd" maxlength="1500"></textarea></label>'+
+      '<label class="f">Photos (jusqu\'à 4)<input type="file" id="pi" accept="image/*" multiple></label>'+
+      '<button class="btn btn-brand" type="submit">Envoyer pour validation</button></form>';
+    $('#pf').addEventListener('submit',function(e){e.preventDefault();run($('button[type=submit]'),async function(){
+      var price=parseInt($('#pp').value,10),old=$('#po').value?parseInt($('#po').value,10):null;
+      if(old!==null&&old<=price)throw new Error('L\'ancien prix doit être supérieur au prix actuel.');
+      var files=Array.prototype.slice.call($('#pi').files).slice(0,4);
+      var ins=await sb.from('products').insert({shop_id:myShop.id,category_id:parseInt($('#pc').value,10),title:$('#pt').value.trim(),description:$('#pd').value.trim()||null,price_xaf:price,old_price_xaf:old,condition:$('#pe').value}).select('id').single();
+      if(ins.error)throw ins.error;
+      var warn=false;
+      for(var i=0;i<files.length;i++){
+        try{var blob=await compress(files[i]);var path=me.id+'/'+ins.data.id+'-'+i+'.jpg';
+          var up=await sb.storage.from('product-photos').upload(path,blob,{contentType:'image/jpeg',upsert:true});if(up.error)throw up.error;
+          var pr=await sb.from('product_photos').insert({product_id:ins.data.id,path:path,position:i});if(pr.error)throw pr.error}
+        catch(x){warn=true}
+      }
+      toast(warn?'Annonce envoyée, mais une photo n\'a pas pu être ajoutée.':'Annonce envoyée pour validation.');go('mine');tabs[1].setAttribute('aria-pressed','true');tabs[0].setAttribute('aria-pressed','false')})});
+  }
+  async function paneMine(){
+    $('#pane').innerHTML='<div class="load">Chargement…</div>';
+    var r=await sb.from('products').select('*,product_photos(path,position)').eq('shop_id',myShop.id).order('created_at',{ascending:false});
+    if(r.error){$('#pane').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+    var l=r.data||[];
+    $('#pane').innerHTML=l.length?'<div class="list">'+l.map(function(p){var im=firstPhoto(p);
+      return '<div class="item"><div class="th">'+(im?'<img src="'+esc(im)+'" alt="">':esc(p.title.charAt(0).toUpperCase()))+'</div><div class="tx"><b>'+esc(p.title)+'</b><div>'+fcfa(p.price_xaf)+' '+statusPill(p)+(p.status==='approved'&&!p.available?' <span class="pill w">Indisponible</span>':'')+'</div>'+
+      (p.status==='rejected'&&p.rejection_reason?'<div class="muted">Motif : '+esc(p.rejection_reason)+'</div>':'')+'<div class="muted">'+dateFr(p.created_at)+' · '+p.views+' vue(s)</div></div>'+
+      (p.status!=='removed'?'<div class="ac"><button class="btn btn-line btn-sm" data-av="'+p.id+'" data-v="'+(p.available?'0':'1')+'">'+(p.available?'Marquer indisponible':'Remettre disponible')+'</button><button class="btn btn-line btn-sm" data-rm="'+p.id+'">Retirer</button></div>':'')+'</div>'}).join('')+'</div>':'<div class="empty">Tu n\'as pas encore d\'annonce.</div>';
+    $$('[data-av]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('products').update({available:b.dataset.v==='1'}).eq('id',b.dataset.av);if(u.error)throw u.error;paneMine()})})});
+    $$('[data-rm]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('products').update({status:'removed'}).eq('id',b.dataset.rm);if(u.error)throw u.error;paneMine()})})});
+  }
+  async function paneReq(){
+    $('#pane').innerHTML='<div class="load">Chargement…</div>';
+    var r=await sb.from('buyer_requests').select('*').eq('status','open').order('created_at',{ascending:false}).limit(50);
+    if(r.error){$('#pane').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+    var l=r.data||[];
+    $('#pane').innerHTML=l.length?'<div class="list">'+l.map(function(q){return '<div class="item"><div class="tx"><b>'+esc(q.title)+'</b><div class="muted">'+esc(cityName(q.city_id))+(q.budget_xaf?' · budget '+fcfa(q.budget_xaf):'')+' · '+dateFr(q.created_at)+'</div></div><div class="ac"><a class="btn btn-wa btn-sm" target="_blank" rel="noopener" href="'+waLink(q.whatsapp,'Bonjour, j\'ai vu votre demande « '+q.title+' » sur Marché237.')+'">Répondre</a></div></div>'}).join('')+'</div>':'<div class="empty">Aucune demande ouverte pour le moment.</div>';
+  }
+}
+
+/* ---------- NOTIFICATIONS ---------- */
+async function viewNotifs(){
+  if(!me){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Notifications</h2><p>Connecte-toi pour voir tes notifications.</p><a class="btn btn-brand" href="#/compte">Connexion</a></div></section>';return}
+  $('#app').innerHTML='<section class="sec"><div class="sec-h"><h2>Notifications</h2><button class="btn btn-line btn-sm" id="rd" type="button">Tout marquer comme lu</button></div><div id="nl" class="list"><div class="load">Chargement…</div></div></section>';
+  var r=await sb.from('notifications').select('*').eq('user_id',me.id).order('created_at',{ascending:false}).limit(50);
+  if(r.error){$('#nl').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+  var l=r.data||[];
+  $('#nl').innerHTML=l.length?l.map(function(n){return '<div class="item" style="'+(n.read?'':'border-color:var(--brand)')+'"><div class="tx"><b>'+esc(n.title)+'</b>'+(n.read?'':' <span class="pill">Nouveau</span>')+'<div>'+esc(n.body||'')+'</div><div class="muted">'+new Date(n.created_at).toLocaleString('fr-FR')+'</div></div></div>'}).join(''):'<div class="empty">Aucune notification pour le moment.</div>';
+  $('#rd').addEventListener('click',function(){var b=this;run(b,async function(){var u=await sb.from('notifications').update({read:true}).eq('user_id',me.id).eq('read',false);if(u.error)throw u.error;await refreshUnread(false);viewNotifs()})});
+}
+
+/* ---------- ADMIN ---------- */
+async function viewAdmin(){
+  if(!isAdmin()){$('#app').innerHTML='<section class="sec narrow"><div class="panel"><h2>Accès réservé</h2><p>Cette page est réservée à l\'administrateur.</p></div></section>';return}
+  $('#app').innerHTML='<section class="sec"><div class="sec-h"><h2>Administration</h2></div><div id="stats" class="stats"></div>'+
+    '<div class="tabs" style="margin-top:16px"><button class="tab" data-t="prod" aria-pressed="true">Annonces</button><button class="tab" data-t="shops" aria-pressed="false">Boutiques</button><button class="tab" data-t="rep" aria-pressed="false">Signalements</button><button class="tab" data-t="sales" aria-pressed="false">Ventes et commissions</button><button class="tab" data-t="users" aria-pressed="false">Utilisateurs</button></div><div id="pane"></div></section>';
+  var tabs=$$('.tab');
+  function go(t){tabs.forEach(function(x){x.setAttribute('aria-pressed',String(x.dataset.t===t))});({prod:aProd,shops:aShops,rep:aRep,sales:aSales,users:aUsers})[t]()}
+  tabs.forEach(function(x){x.addEventListener('click',function(){go(x.dataset.t)})});
+  async function cnt(t,f){var q=sb.from(t).select('*',{count:'exact',head:true});if(f)q=f(q);var r=await q;return r.count||0}
+  Promise.all([cnt('products',function(q){return q.eq('status','pending')}),cnt('products',function(q){return q.eq('status','approved')}),cnt('shops',function(q){return q.eq('status','pending')}),cnt('profiles'),cnt('reports',function(q){return q.eq('status','open')})]).then(function(c){
+    $('#stats').innerHTML=[['Annonces à valider',c[0]],['Annonces publiées',c[1]],['Boutiques à valider',c[2]],['Utilisateurs',c[3]],['Signalements ouverts',c[4]]].map(function(x){return '<div class="stat"><b>'+x[1]+'</b>'+x[0]+'</div>'}).join('')});
+  function thumb(p){var im=firstPhoto(p);return '<div class="th">'+(im?'<img src="'+esc(im)+'" alt="">':esc((p.title||'?').charAt(0).toUpperCase()))+'</div>'}
+
+  async function aProd(){
+    $('#pane').innerHTML='<div class="load">Chargement…</div>';
+    var r=await sb.from('products').select('*,product_photos(path,position),shops(name)').eq('status','pending').order('created_at');
+    if(r.error){$('#pane').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+    var l=r.data||[];
+    $('#pane').innerHTML=l.length?'<div class="list">'+l.map(function(p){return '<div class="item">'+thumb(p)+'<div class="tx"><b>'+esc(p.title)+'</b><div>'+fcfa(p.price_xaf)+' · '+(p.condition==='new'?'Neuf':'Occasion')+'</div><div class="muted">'+esc(p.shops&&p.shops.name)+' · '+esc(catName(p.category_id))+'</div><div class="muted" style="white-space:pre-wrap">'+esc((p.description||'').slice(0,240))+'</div></div><div class="ac"><button class="btn btn-brand btn-sm" data-ok="'+p.id+'">Approuver</button><button class="btn btn-deal btn-sm" data-no="'+p.id+'">Refuser</button></div></div>'}).join('')+'</div>':'<div class="empty">Aucune annonce en attente.</div>';
+    $$('[data-ok]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('products').update({status:'approved',rejection_reason:null}).eq('id',b.dataset.ok);if(u.error)throw u.error;toast('Annonce publiée.');aProd()})})});
+    $$('[data-no]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){
+      var m=modal('<h2>Refuser l\'annonce</h2><form class="stack" id="nf"><label class="f">Motif (visible par le vendeur)<input type="text" id="nr" required maxlength="200" placeholder="Ex. Photos manquantes"></label><button class="btn btn-deal" type="submit">Refuser</button><button class="btn btn-line" type="button" data-close>Annuler</button></form>');
+      $('#nf',m).addEventListener('submit',function(e){e.preventDefault();run($('button[type=submit]',m),async function(){var u=await sb.from('products').update({status:'rejected',rejection_reason:$('#nr',m).value.trim()}).eq('id',b.dataset.no);if(u.error)throw u.error;m.close();aProd()})})})});
+  }
+  async function aShops(){
+    $('#pane').innerHTML='<div class="load">Chargement…</div>';
+    var r=await sb.from('shops').select('*').order('created_at',{ascending:false});
+    if(r.error){$('#pane').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+    var l=r.data||[];
+    $('#pane').innerHTML=l.length?'<div class="list">'+l.map(function(s){var st={pending:['À valider','w'],approved:['Approuvée',''],suspended:['Suspendue','r']}[s.status];
+      return '<div class="item"><div class="tx"><b>'+esc(s.name)+'</b> <span class="pill '+st[1]+'">'+st[0]+'</span>'+(s.verified?' <span class="ok">✓ vérifiée</span>':'')+'<div class="muted">'+esc(cityName(s.city_id))+(s.quarter?', '+esc(s.quarter):'')+' · WhatsApp '+esc(s.whatsapp)+'</div><div class="muted">'+esc(s.description||'')+'</div></div><div class="ac">'+
+      (s.status!=='approved'?'<button class="btn btn-brand btn-sm" data-s="'+s.id+'" data-v="approved">Approuver</button>':'')+
+      (s.status!=='suspended'?'<button class="btn btn-deal btn-sm" data-s="'+s.id+'" data-v="suspended">Suspendre</button>':'')+
+      '<button class="btn btn-line btn-sm" data-vf="'+s.id+'" data-v="'+(s.verified?'0':'1')+'">'+(s.verified?'Retirer ✓':'Marquer vérifiée')+'</button></div></div>'}).join('')+'</div>':'<div class="empty">Aucune boutique.</div>';
+    $$('[data-s]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('shops').update({status:b.dataset.v}).eq('id',b.dataset.s);if(u.error)throw u.error;aShops()})})});
+    $$('[data-vf]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('shops').update({verified:b.dataset.v==='1'}).eq('id',b.dataset.vf);if(u.error)throw u.error;aShops()})})});
+  }
+  async function aRep(){
+    $('#pane').innerHTML='<div class="load">Chargement…</div>';
+    var r=await sb.from('reports').select('*,products(id,title,status)').eq('status','open').order('created_at');
+    if(r.error){$('#pane').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+    var l=r.data||[];
+    $('#pane').innerHTML=l.length?'<div class="list">'+l.map(function(x){return '<div class="item"><div class="tx"><b>'+esc(x.products&&x.products.title)+'</b><div class="muted">Motif : '+esc(x.reason)+' · '+dateFr(x.created_at)+'</div></div><div class="ac"><button class="btn btn-deal btn-sm" data-rmp="'+x.product_id+'" data-rid="'+x.id+'">Retirer l\'annonce</button><button class="btn btn-line btn-sm" data-rid2="'+x.id+'">Classer</button></div></div>'}).join('')+'</div>':'<div class="empty">Aucun signalement ouvert.</div>';
+    $$('[data-rmp]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('products').update({status:'removed'}).eq('id',b.dataset.rmp);if(u.error)throw u.error;await sb.from('reports').update({status:'handled'}).eq('id',b.dataset.rid);aRep()})})});
+    $$('[data-rid2]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('reports').update({status:'handled'}).eq('id',b.dataset.rid2);if(u.error)throw u.error;aRep()})})});
+  }
+  async function aSales(){
+    $('#pane').innerHTML='<div class="load">Chargement…</div>';
+    var rs=await Promise.all([sb.from('settings').select('*').eq('key','commission_rate_percent').maybeSingle(),sb.from('sales').select('*,shops(name)').order('created_at',{ascending:false}).limit(100),sb.from('shops').select('id,name').eq('status','approved').order('name')]);
+    var rate=rs[0].data?rs[0].data.value:'5',sales=rs[1].data||[],shops=rs[2].data||[];
+    var due=sales.filter(function(x){return x.status!=='cancelled'&&x.status!=='paid'}).reduce(function(a,x){return a+Number(x.commission_xaf)},0);
+    var paid=sales.filter(function(x){return x.status==='paid'}).reduce(function(a,x){return a+Number(x.commission_xaf)},0);
+    $('#pane').innerHTML='<div class="panel stack" style="display:flex;flex-direction:column;gap:10px"><b>Taux de commission</b><form id="rf2" class="two" style="align-items:end"><label class="f">Pourcentage (%)<input type="number" id="rt" min="0" max="100" step="0.5" value="'+esc(rate)+'" required></label><button class="btn btn-brand" type="submit">Enregistrer</button></form><div class="muted">Le nouveau taux s\'applique aux ventes déclarées à partir de maintenant.</div></div>'+
+      '<div class="stats" style="margin-top:12px"><div class="stat"><b>'+fcfa(due)+'</b>Commissions à encaisser</div><div class="stat"><b>'+fcfa(paid)+'</b>Commissions encaissées</div></div>'+
+      '<div class="panel" style="margin-top:12px"><b>Déclarer une vente</b><form id="sf2" class="two" style="margin-top:8px;align-items:end"><label class="f">Boutique<select id="sh" required>'+opts(shops)+'</select></label><label class="f">Montant de la vente (FCFA)<input type="number" id="sa" required min="1" step="500" inputmode="numeric"></label><button class="btn btn-brand" type="submit">Enregistrer la vente</button></form></div>'+
+      '<div class="list" style="margin-top:12px">'+(sales.length?sales.map(function(x){return '<div class="item"><div class="tx"><b>'+esc(x.shops&&x.shops.name)+'</b> · '+fcfa(x.amount_xaf)+'<div class="muted">Commission '+x.commission_rate+' % = '+fcfa(x.commission_xaf)+' · '+dateFr(x.created_at)+' · '+({declared:'Déclarée',confirmed:'Confirmée',paid:'Payée',cancelled:'Annulée'}[x.status])+'</div></div><div class="ac">'+(x.status==='declared'?'<button class="btn btn-line btn-sm" data-st="'+x.id+'" data-v="confirmed">Confirmer</button>':'')+(x.status==='declared'||x.status==='confirmed'?'<button class="btn btn-brand btn-sm" data-st="'+x.id+'" data-v="paid">Marquer payée</button><button class="btn btn-line btn-sm" data-st="'+x.id+'" data-v="cancelled">Annuler</button>':'')+'</div></div>'}).join(''):'<div class="empty">Aucune vente enregistrée.</div>')+'</div>';
+    $('#rf2').addEventListener('submit',function(e){e.preventDefault();run($('button',$('#rf2')),async function(){var u=await sb.from('settings').update({value:String($('#rt').value)}).eq('key','commission_rate_percent');if(u.error)throw u.error;toast('Taux enregistré.')})});
+    $('#sf2').addEventListener('submit',function(e){e.preventDefault();run($('button',$('#sf2')),async function(){var u=await sb.from('sales').insert({shop_id:$('#sh').value,amount_xaf:parseInt($('#sa').value,10)});if(u.error)throw u.error;toast('Vente enregistrée.');aSales()})});
+    $$('[data-st]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('sales').update({status:b.dataset.v}).eq('id',b.dataset.st);if(u.error)throw u.error;aSales()})})});
+  }
+  async function aUsers(){
+    $('#pane').innerHTML='<div class="load">Chargement…</div>';
+    var r=await sb.from('profiles').select('*').order('created_at',{ascending:false}).limit(150);
+    if(r.error){$('#pane').innerHTML='<div class="empty">'+esc(errMsg(r.error))+'</div>';return}
+    var l=r.data||[];
+    $('#pane').innerHTML='<div class="list">'+l.map(function(u){var role={buyer:'Acheteur',seller:'Vendeur',admin:'Admin'}[u.role];
+      return '<div class="item"><div class="tx"><b>'+esc(u.full_name||'(sans nom)')+'</b> <span class="pill">'+role+'</span>'+(u.status==='suspended'?' <span class="pill r">Suspendu</span>':'')+'<div class="muted">'+esc(u.phone||'')+' · inscrit le '+dateFr(u.created_at)+'</div></div>'+
+      (u.id!==me.id&&u.role!=='admin'?'<div class="ac"><button class="btn btn-line btn-sm" data-u="'+u.id+'" data-v="'+(u.status==='suspended'?'active':'suspended')+'">'+(u.status==='suspended'?'Réactiver':'Suspendre')+'</button></div>':'')+'</div>'}).join('')+'</div>';
+    $$('[data-u]',$('#pane')).forEach(function(b){b.addEventListener('click',function(){run(b,async function(){var u=await sb.from('profiles').update({status:b.dataset.v}).eq('id',b.dataset.u);if(u.error)throw u.error;aUsers()})})});
+  }
+  go('prod');
+}
+
+/* ---------- démarrage ---------- */
+(async function boot(){
+  try{
+    var rs=await Promise.all([sb.from('cities').select('*').order('name'),sb.from('categories').select('*').eq('active',true).order('position')]);
+    cities=rs[0].data||[];cats=rs[1].data||[];
+    var dl=document.createElement('datalist');dl.id='dl-cities';dl.innerHTML=cities.map(function(c){return '<option value="'+esc(c.name)+'">'}).join('');document.body.appendChild(dl);
+    var s=(await sb.auth.getSession()).data.session;await setSession(s);
+    sb.auth.onAuthStateChange(function(ev){if(ev==='SIGNED_OUT'&&me){setSession(null).then(route)}});
+    setInterval(function(){if(me&&!document.hidden)refreshUnread(true)},60000);
+  }catch(e){}
+  route();
+})();
+})();
+</script>
+</body>
+</html>
